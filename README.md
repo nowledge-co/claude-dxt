@@ -10,11 +10,13 @@ For more details, please refer to the [Nowledge Mem Documentation](https://mem.n
 
 ## End User Installation
 
+> See also the end user installation details at [Nowledge Mem Documentation: Claude Desktop](https://mem.nowledge.co/docs/integrations#claude-desktop).
+
 1. Install Python 3.13
 
 ```bash
 which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-brew install python@3.13
+python3.13 --version || brew install python@3.13
 ```
 
 1. Download Nowledge Mem Claude Desktop Extension and double click to install.

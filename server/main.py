@@ -1,18 +1,21 @@
+#!/usr/bin/env python3
 import sys
 from fastmcp import FastMCP
 from fastmcp.server.proxy import ProxyClient
 
-config = {
-    "mcpServers": {
-        "default": {  # For single server configs, 'default' is commonly used
-            "url": "http://localhost:14242/mcp",
-            "transport": "http"
-        }
-    }
-}
+from fastmcp import Client
+from fastmcp.client.transports import StreamableHttpTransport
+
+client = Client(
+    transport=StreamableHttpTransport(
+        "http://localhost:14242/mcp", 
+        headers={"APP": "Claude"},
+    )
+)
+
 # Bridge remote SSE server to local stdio
 remote_proxy = FastMCP.as_proxy(
-    config,
+    client,
     name="Nowledge Mem"
 )
 

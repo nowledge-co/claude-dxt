@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nowledge-mem-python"
+version = "1.0.0"
+description = "A Python MCP server for Nowledge Mem"
+authors = [
+    {name = "Nowledge Labs, LLC", email = "hello@nowledge-labs.ai"}
+]
+license = {text = "Apache-2.0"}
+classifiers = [
+    "Private :: Do Not Upload"  # Prevents accidental uploads to PyPI
+]
+
+[project.dependencies]
+fastmcp = ">=2.12.4"
+
+[tool.setuptools]
+packages = ["server"]
+
+[project.scripts]
+bundle-deps = "python:install_deps"
+
+# Custom scripts section for DXT development
+[tool.dxt]
+bundle = "pip install \"mcp[all]\" --target server/lib --upgrade --force-reinstall"
+test = "python server/main.py --debug"
+pack = "npx @anthropic-ai/dxt pack"

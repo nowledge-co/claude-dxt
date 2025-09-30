@@ -1,0 +1,67 @@
+{
+  "manifest_version": "0.2",
+  "name": "Nowledge-Mem-dxt",
+  "display_name": "Nowledge Mem",
+  "version": "1.0.0",
+  "description": "The graph augmented, smart and local-first personal context manager that just works.",
+  "author": {
+    "name": "Nowledge Labs, LLC",
+    "email": "hello@nowledge-labs.ai",
+    "url": "https://www.nowledge-labs.ai/"
+  },
+  "homepage": "https://mem.nowledge.co/",
+  "documentation": "https://mem.nowledge.co/docs",
+  "support": "https://mem.nowledge.co/docs/troubleshooting#report-issue",
+  "icon": "icon.png",
+  "server": {
+    "type": "python",
+    "entry_point": "server/main.py",
+    "mcp_config": {
+      "command": "python3",
+      "args": [
+        "${__dirname}/server/main.py"
+      ]
+    }
+  },
+  "tools": [
+    {
+      "name": "memory_search",
+      "description": "Search memories using semantic queries with optional label filtering"
+    },
+    {
+      "name": "list_memory_labels",
+      "description": "Get all available memory labels with usage counts"
+    },
+    {
+      "name": "memory_add",
+      "description": "Add new memory to knowledge base"
+    },
+    {
+      "name": "memory_update",
+      "description": "Update existing memory content, metadata, and labels"
+    }
+  ],
+  "prompts": [
+    {
+      "name": "sum",
+      "description": "A planning prompt to help analyze content and create high-quality memory entries",
+      "text": "Analyze our current conversation thread and create structured memory entries for important information. Follow this systematic approach:\\n\\n**Analysis Process:**\\n\\n1. **Content Review**: Examine our current conversation thread to identify:\\n   - Key insights, decisions, and learnings\\n   - Important details, names, and dates\\n   - Actionable items and outcomes\\n   - Information valuable for future reference\\n\\n2. **Memory Structuring**: For each significant piece of information, I'll create:\\n   - **Concise Title** (max 60 characters): Captures the essence and is searchable\\n   - **Structured Summary**: Preserves key details, uses clear language, includes actionable items\\n   - **Importance Score** (0.1-1.0): Based on significance and future value\\n   - **Relevant Labels**: 2-4 labels using lowercase with hyphens if in English (e.g., work, meeting, python, decision)\\n\\n3. **Quality Standards**: Ensure each memory is:\\n   - Searchable and useful for future reference\\n   - Contains enough context to make sense later\\n   - Uses clear, professional language(no emojis, etc.)\\n   - Preserves important details while being concise(include needed code examples, etc.)\\n   - Focuses on insights and outcomes\\n\\nNow analyze current conversation thread and use the nowledge memory_add tool to create structured memory entries for the important information discussed."
+    }
+  ],
+  "keywords": [
+    "memory",
+    "state",
+    "progress",
+    "preference"
+  ],
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nowledge-co/claude-dxt"
+  },
+  "compatibility": {
+    "platforms": [
+      "darwin"
+    ]
+  }
+}

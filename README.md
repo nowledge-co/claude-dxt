@@ -6,11 +6,14 @@
 
 ![Search Memories](screenshots/demo4.png)
 
+For more details, please refer to the [Nowledge Mem Documentation](https://mem.nowledge.co/docs).
+
 ## End User Installation
 
 1. Install Python 3.13
 
 ```bash
+which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 brew install python@3.13
 ```
 

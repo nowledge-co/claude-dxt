@@ -2,9 +2,9 @@
 
 ## Demo Screenshots
 
-![Add Memory](screenshots/demo2.png)
+![Add Memory](https://github.com/user-attachments/assets/45dd1aa5-2bab-4626-a40f-04f6e9a46612)
 
-![Search Memories](screenshots/demo4.png)
+![Search Memories](https://github.com/user-attachments/assets/cebed3bb-b6f6-41b5-9593-b8d3411d5f85)
 
 For more details, please refer to the [Nowledge Mem Documentation](https://mem.nowledge.co/docs).
 
@@ -21,7 +21,7 @@ python3.13 --version || brew install python@3.13
 
 1. Download Nowledge Mem Claude Desktop Extension and double click to install.
 
-![Install Nowledge Mem Claude Desktop Extension](screenshots/demo0.png)
+![Install Nowledge Mem Claude Desktop Extension](https://github.com/user-attachments/assets/34ac758d-8cc7-4bb8-9f3f-d41380a36ef9)
 
 ## Build the MCP bundle
 
@@ -36,3 +36,10 @@ python3.13 -m pip install -r requirements.txt -U --target server/lib
 
 npx @anthropic-ai/mcpb pack
 ```
+
+<details>
+<summary><strong>Show Metadata Content</strong></summary>
+
+> nowledge-mem: io.github.nowledge-co/nowledge-mem
+
+</details>

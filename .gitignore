@@ -148,3 +148,5 @@ server/lib
 
 # build
 *.egg-info/
+
+.*_token

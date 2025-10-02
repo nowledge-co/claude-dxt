@@ -40,6 +40,6 @@ npx @anthropic-ai/mcpb pack
 <details>
 <summary><strong>Show Metadata Content</strong></summary>
 
-> nowledge-mem: io.github.nowledge-co/nowledge-mem
+> mcp-name: io.github.nowledge-co/server.json
 
 </details>

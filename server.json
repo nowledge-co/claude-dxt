@@ -6,12 +6,12 @@
     "url": "https://github.com/nowledge-co/claude-dxt",
     "source": "github"
   },
-  "version": "1.0.0",
+  "version": "1.2.0",
   "packages": [
     {
       "registryType": "pypi",
       "identifier": "nowledge-mem",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "transport": {
         "type": "stdio"
       }

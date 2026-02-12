@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "Nowledge-Mem-dxt",
   "display_name": "Nowledge Mem",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "The graph augmented, smart and local-first personal context manager that just works.",
   "author": {
     "name": "Nowledge Labs, LLC",

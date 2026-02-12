@@ -49,6 +49,30 @@
     {
       "name": "memory_update",
       "description": "Update existing memory content, metadata, and labels"
+    },
+    {
+      "name": "memory_delete",
+      "description": "Delete a memory by ID"
+    },
+    {
+      "name": "explore_graph",
+      "description": "Explore the knowledge graph around memories with interactive visualization"
+    },
+    {
+      "name": "memory_evolves_chain",
+      "description": "Get the version history chain for a memory"
+    },
+    {
+      "name": "memory_neighbors",
+      "description": "Get graph neighbors including EVOLVES chains, entities, and crystals"
+    },
+    {
+      "name": "graph_stats",
+      "description": "Get knowledge graph statistics"
+    },
+    {
+      "name": "list_crystals",
+      "description": "List crystallized knowledge synthesized from multiple memories"
     }
   ],
   "prompts": [

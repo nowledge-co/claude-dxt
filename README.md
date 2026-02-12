@@ -6,6 +6,8 @@
 
 ![Search Memories](https://github.com/user-attachments/assets/cebed3bb-b6f6-41b5-9593-b8d3411d5f85)
 
+https://github.com/user-attachments/assets/a99a1daa-e73c-429e-a17b-0183b2f9671a
+
 For more details, please refer to the [Nowledge Mem Documentation](https://mem.nowledge.co/docs).
 
 ## End User Installation

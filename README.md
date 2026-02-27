@@ -25,6 +25,19 @@ python3.13 --version || brew install python@3.13
 
 ![Install Nowledge Mem Claude Desktop Extension](https://github.com/user-attachments/assets/34ac758d-8cc7-4bb8-9f3f-d41380a36ef9)
 
+## Access Mem Anywhere (Remote Access)
+
+By default the extension connects to your local Mem at `localhost:14242`. To connect to a remote Mem instance via [Access Anywhere](https://mem.nowledge.co/docs/remote-access):
+
+1. Open **Settings → Access Mem Anywhere** in Nowledge Mem Desktop and start a tunnel.
+2. Copy the **URL** and **API Key**.
+3. In Claude Desktop, open the Nowledge Mem extension settings and fill in:
+   - **Remote URL** — your Access Anywhere URL (e.g. `https://mem.example.com`)
+   - **API Key** — your Mem API key (`nmem_...`)
+4. Restart Claude Desktop.
+
+Leave both fields empty to use local Mem (the default).
+
 ## Build the MCP bundle
 
 > [!NOTE]

@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 import os
 import sys
+from uuid import uuid4
 from fastmcp import FastMCP, Client
 from fastmcp.client.transports import StreamableHttpTransport
 
 LOCAL_URL = "http://localhost:14242/mcp"
+CLIENT_SESSION_ID = uuid4().hex
 
 
 def _resolve(env_var: str) -> str:
@@ -20,13 +22,21 @@ api_key = _resolve("NMEM_API_KEY")
 
 if remote_url:
     base_url = f"{remote_url}/mcp"
-    headers = {"APP": "Claude"}
+    headers = {
+        "APP": "Claude",
+        "X-Nmem-Client": "claude-dxt",
+        "X-Nmem-Client-Session": CLIENT_SESSION_ID,
+    }
     if api_key:
         headers["Authorization"] = f"Bearer {api_key}"
     print(f"[Nowledge Mem] Connecting to remote: {remote_url}", file=sys.stderr)
 else:
     base_url = LOCAL_URL
-    headers = {"APP": "Claude"}
+    headers = {
+        "APP": "Claude",
+        "X-Nmem-Client": "claude-dxt",
+        "X-Nmem-Client-Session": CLIENT_SESSION_ID,
+    }
     print("[Nowledge Mem] Connecting to local Mem", file=sys.stderr)
 
 client = Client(

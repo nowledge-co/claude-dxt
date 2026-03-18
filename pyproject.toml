@@ -1,8 +1,8 @@
 [project]
 name = "nowledge-mem-claude-desktop"
-version = "1.3.0"
+version = "1.4.0"
 description = "Claude Desktop extension runtime for Nowledge Mem"
 requires-python = ">=3.13,<3.14"
 dependencies = [
-  "fastmcp>=2.12.4"
+  "fastmcp==3.1.1"
 ]

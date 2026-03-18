@@ -1,6 +1,6 @@
 # Nowledge Mem Claude Desktop Extension
 
-One-click Claude Desktop integration for Nowledge Mem on macOS and Windows. After installation, Claude can search your memories, save important context, and update existing knowledge during any conversation.
+One-click Claude Desktop integration for Nowledge Mem on macOS and Windows. The same bundle supports Apple Silicon and Intel Macs, plus Windows x64 and ARM64. After installation, Claude can search your memories, save important context, and update existing knowledge during any conversation.
 
 ## Demo Screenshots
 
@@ -55,27 +55,21 @@ Restart Claude Desktop after changing the file.
 
 ## Build From Source
 
-The bundle uses system Python 3.13 plus vendored dependencies so the same repository can produce macOS and Windows builds with the public MCPB toolchain.
-
-Build on the target OS in a clean checkout, or remove `server/lib` before repacking so old platform wheels do not leak into the archive.
-
-macOS:
+The bundle uses system Python 3.13 and vendors separate dependency trees for each supported OS and CPU architecture into one `.mcpb`, so the released artifact can work across macOS and Windows without being tied to the machine that built it.
 
 ```bash
-rm -rf server/lib
-mkdir -p server/lib
-python3.13 -m pip install -r requirements.txt --upgrade --target server/lib
+python3.13 scripts/build_bundle.py
 npx @anthropic-ai/mcpb pack
 ```
 
-Windows:
+The build script downloads wheels for:
 
-```powershell
-Remove-Item server/lib -Recurse -Force -ErrorAction SilentlyContinue
-New-Item server/lib -ItemType Directory | Out-Null
-py -3.13 -m pip install -r requirements.txt --upgrade --target server/lib
-npx @anthropic-ai/mcpb pack
-```
+- macOS Apple Silicon (`server/lib/darwin-arm64`)
+- macOS Intel (`server/lib/darwin-x86_64`)
+- Windows x64 (`server/lib/win32-amd64`)
+- Windows ARM64 (`server/lib/win32-arm64`)
+
+`server/bootstrap.py` selects the correct tree at launch time before importing FastMCP. That avoids the common failure mode where a bundle packed on one machine silently ships only that machine's native binaries.
 
 <details>
 <summary><strong>Show Metadata Content</strong></summary>

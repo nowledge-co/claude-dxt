@@ -2,7 +2,7 @@
   "manifest_version": "0.2",
   "name": "Nowledge-Mem-dxt",
   "display_name": "Nowledge Mem",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "The graph augmented, smart and local-first personal context manager that just works.",
   "author": {
     "name": "Nowledge Labs, LLC",
@@ -20,22 +20,13 @@
     "screenshots/demo4.png"
   ],
   "server": {
-    "type": "python",
-    "entry_point": "server/bootstrap.py",
+    "type": "node",
+    "entry_point": "dist/index.js",
     "mcp_config": {
-      "command": "python3.13",
+      "command": "node",
       "args": [
-        "${__dirname}/server/bootstrap.py"
-      ],
-      "platform_overrides": {
-        "win32": {
-          "command": "py",
-          "args": [
-            "-3.13",
-            "${__dirname}/server/bootstrap.py"
-          ]
-        }
-      }
+        "${__dirname}/dist/index.js"
+      ]
     }
   },
   "tools": [
@@ -102,10 +93,7 @@
     "platforms": [
       "darwin",
       "win32"
-    ],
-    "runtimes": {
-      "python": ">=3.13 <3.14"
-    }
+    ]
   },
   "privacy_policies": [
     "https://mem.nowledge.co/privacy"

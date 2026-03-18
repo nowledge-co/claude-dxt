@@ -1,0 +1,17 @@
+{
+  "name": "@nowledge/claude-dxt",
+  "private": true,
+  "version": "1.4.1",
+  "type": "module",
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "test": "node --test tests/*.test.js",
+    "smoke": "npm run build && node ./scripts/smoke-test.mjs",
+    "pack": "npm run build && npx @anthropic-ai/mcpb pack"
+  },
+  "devDependencies": {
+    "@anthropic-ai/mcpb": "2.1.2",
+    "@modelcontextprotocol/sdk": "1.27.1",
+    "esbuild": "0.25.10"
+  }
+}

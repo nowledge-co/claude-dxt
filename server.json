@@ -6,21 +6,13 @@
     "url": "https://github.com/nowledge-co/claude-dxt",
     "source": "github"
   },
-  "version": "1.4.0",
+  "version": "1.4.1",
   "packages": [
     {
-      "registryType": "pypi",
-      "identifier": "nowledge-mem",
-      "version": "1.4.0",
-      "transport": {
-        "type": "stdio"
-      }
-    },
-    {
       "registryType": "mcpb",
-      "identifier": "https://github.com/nowledge-co/claude-dxt/releases/download/v1.4.0/claude-dxt.mcpb",
-      "version": "1.4.0",
-      "fileSha256": "c8b4619833113037fde98d37b04a2d91b1d0807e1b783e5a010ce3eec030bd28",
+      "identifier": "https://github.com/nowledge-co/claude-dxt/releases/download/v1.4.1/claude-dxt.mcpb",
+      "version": "1.4.1",
+      "fileSha256": "d9842179d9bb86d14f03a0f8e2e851dacd21197ebccbc1e9cab0df46463509f0",
       "transport": {
         "type": "stdio"
       }

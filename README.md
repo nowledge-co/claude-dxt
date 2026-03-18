@@ -1,6 +1,6 @@
 # Nowledge Mem Claude Desktop Extension
 
-One-click Claude Desktop integration for Nowledge Mem on macOS and Windows. The same bundle supports Apple Silicon and Intel Macs, plus Windows x64 and ARM64. After installation, Claude can search your memories, save important context, and update existing knowledge during any conversation.
+One-click Claude Desktop integration for Nowledge Mem on macOS and Windows, with no separate Python installation required. After installation, Claude can search your memories, save important context, and update existing knowledge during any conversation.
 
 ## Demo Screenshots
 
@@ -17,11 +17,8 @@ For more details, please refer to the [Nowledge Mem Documentation](https://mem.n
 > See also the end user installation details at [Nowledge Mem Documentation: Claude Desktop](https://mem.nowledge.co/docs/integrations/claude-desktop).
 
 1. Make sure Nowledge Mem is already running on the same machine, and update Claude Desktop to the latest version.
-2. Install Python 3.13.
-   - macOS: `python3.13 --version || brew install python@3.13`
-   - Windows: make sure `py -3.13 --version` works in Command Prompt or PowerShell.
-3. Download the Nowledge Mem Claude Desktop extension and double-click the `.mcpb` file to install it.
-4. Restart Claude Desktop once after installation.
+2. Download the Nowledge Mem Claude Desktop extension and double-click the `.mcpb` file to install it.
+3. Restart Claude Desktop once after installation.
 
 ![Install Nowledge Mem Claude Desktop Extension](https://github.com/user-attachments/assets/34ac758d-8cc7-4bb8-9f3f-d41380a36ef9)
 
@@ -55,21 +52,21 @@ Restart Claude Desktop after changing the file.
 
 ## Build From Source
 
-The bundle uses system Python 3.13 and vendors separate dependency trees for each supported OS and CPU architecture into one `.mcpb`, so the released artifact can work across macOS and Windows without being tied to the machine that built it.
+The extension uses the Node runtime that ships with Claude Desktop, so end users do not need to install Python or Node.
 
 ```bash
-python3.13 scripts/build_bundle.py
-npx @anthropic-ai/mcpb pack
+npm ci
+npm test
+npm run pack
 ```
 
-The build script downloads wheels for:
+For maintainers:
 
-- macOS Apple Silicon (`server/lib/darwin-arm64`)
-- macOS Intel (`server/lib/darwin-x86_64`)
-- Windows x64 (`server/lib/win32-amd64`)
-- Windows ARM64 (`server/lib/win32-arm64`)
-
-`server/bootstrap.py` selects the correct tree at launch time before importing FastMCP. That avoids the common failure mode where a bundle packed on one machine silently ships only that machine's native binaries.
+- `npm run build` bundles the bridge into `dist/index.js`
+- `npm test` rebuilds and runs the end-to-end MCP forwarding checks
+- `npm run pack` builds and creates the final `.mcpb`
+- `npm ci` also installs the pinned `mcpb` packer locally, so `npx @anthropic-ai/mcpb pack` resolves to the tested version inside this repo
+- the release archive excludes `node_modules/`, source files, and stale Python artifacts
 
 <details>
 <summary><strong>Show Metadata Content</strong></summary>

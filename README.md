@@ -1,5 +1,7 @@
 # Nowledge Mem Claude Desktop Extension
 
+One-click Claude Desktop integration for Nowledge Mem on macOS and Windows. After installation, Claude can search your memories, save important context, and update existing knowledge during any conversation.
+
 ## Demo Screenshots
 
 ![Add Memory](https://github.com/user-attachments/assets/45dd1aa5-2bab-4626-a40f-04f6e9a46612)
@@ -12,43 +14,66 @@ For more details, please refer to the [Nowledge Mem Documentation](https://mem.n
 
 ## End User Installation
 
-> See also the end user installation details at [Nowledge Mem Documentation: Claude Desktop](https://mem.nowledge.co/docs/integrations#claude-desktop).
+> See also the end user installation details at [Nowledge Mem Documentation: Claude Desktop](https://mem.nowledge.co/docs/integrations/claude-desktop).
 
-1. Install Python 3.13
-
-```bash
-which brew || /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-python3.13 --version || brew install python@3.13
-```
-
-1. Download Nowledge Mem Claude Desktop Extension and double click to install.
+1. Make sure Nowledge Mem is already running on the same machine, and update Claude Desktop to the latest version.
+2. Install Python 3.13.
+   - macOS: `python3.13 --version || brew install python@3.13`
+   - Windows: make sure `py -3.13 --version` works in Command Prompt or PowerShell.
+3. Download the Nowledge Mem Claude Desktop extension and double-click the `.mcpb` file to install it.
+4. Restart Claude Desktop once after installation.
 
 ![Install Nowledge Mem Claude Desktop Extension](https://github.com/user-attachments/assets/34ac758d-8cc7-4bb8-9f3f-d41380a36ef9)
 
 ## Access Mem Anywhere (Remote Access)
 
-By default the extension connects to your local Mem at `localhost:14242`. To connect to a remote Mem instance via [Access Anywhere](https://mem.nowledge.co/docs/remote-access):
+By default the extension connects to your local Mem at `127.0.0.1:14242`.
 
-1. Open **Settings → Access Mem Anywhere** in Nowledge Mem Desktop and start a tunnel.
-2. Copy the **URL** and **API Key**.
-3. In Claude Desktop, open the Nowledge Mem extension settings and fill in:
-   - **Remote URL** — your Access Anywhere URL (e.g. `https://mem.example.com`)
-   - **API Key** — your Mem API key (`nmem_...`)
-4. Restart Claude Desktop.
+For remote access, the extension reads the same shared config file as the `nmem` CLI:
 
-Leave both fields empty to use local Mem (the default).
+- macOS / Linux: `~/.nowledge-mem/config.json`
+- Windows: `%USERPROFILE%\\.nowledge-mem\\config.json`
 
-## Build the MCP bundle
+If you start **Access Anywhere** from Nowledge Mem Desktop on the same machine, this file is usually written for you automatically.
 
-> [!NOTE]
->
-> Python 3.13 is required due to CPython Bug on leveraging dependencies in lib folder.
+If you need to point Claude Desktop at a remote Mem manually, create the file with:
+
+```json
+{
+  "apiUrl": "https://mem.example.com",
+  "apiKey": "nmem_your_key"
+}
+```
+
+Restart Claude Desktop after changing the file.
+
+## Troubleshooting
+
+1. In Claude Desktop, click the `+` button in the chat box and open **Connectors** to confirm **Nowledge Mem** appears.
+2. If it does not, open **Settings → Extensions → Advanced Settings** and inspect the extension status and logs there.
+3. If you're using Access Anywhere, verify the shared config file above points to the correct URL and key.
+
+## Build From Source
+
+The bundle uses system Python 3.13 plus vendored dependencies so the same repository can produce macOS and Windows builds with the public MCPB toolchain.
+
+Build on the target OS in a clean checkout, or remove `server/lib` before repacking so old platform wheels do not leak into the archive.
+
+macOS:
 
 ```bash
-brew install python@3.13
+rm -rf server/lib
+mkdir -p server/lib
+python3.13 -m pip install -r requirements.txt --upgrade --target server/lib
+npx @anthropic-ai/mcpb pack
+```
 
-python3.13 -m pip install -r requirements.txt -U --target server/lib
+Windows:
 
+```powershell
+Remove-Item server/lib -Recurse -Force -ErrorAction SilentlyContinue
+New-Item server/lib -ItemType Directory | Out-Null
+py -3.13 -m pip install -r requirements.txt --upgrade --target server/lib
 npx @anthropic-ai/mcpb pack
 ```
 

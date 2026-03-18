@@ -1,6 +1,6 @@
 # Nowledge Mem Claude Desktop Extension
 
-One-click Claude Desktop integration for Nowledge Mem on macOS and Windows, with no separate Python installation required. After installation, Claude can search your memories, save important context, and update existing knowledge during any conversation.
+One-click Claude Desktop integration for Nowledge Mem on macOS and Windows, with no separate Python or Node installation required. After installation, Claude can search your memories, save important context, and update existing knowledge during any conversation.
 
 ## Demo Screenshots
 
@@ -42,6 +42,8 @@ If you need to point Claude Desktop at a remote Mem manually, create the file wi
 }
 ```
 
+Use your server root URL in `apiUrl`. If you already have an older config ending in `/remote-api` or `/mcp`, the extension accepts that too.
+
 Restart Claude Desktop after changing the file.
 
 ## Troubleshooting
@@ -66,7 +68,8 @@ For maintainers:
 - `npm run build` bundles the bridge into `dist/index.js`
 - `npm test` rebuilds and runs the end-to-end MCP forwarding checks
 - `npm run smoke` validates the built `dist/index.js` against a mock MCP server
-- `npm run pack` builds and creates the final `.mcpb`
+- `npm run pack` builds, packages, and audits the final `.mcpb`
+- `npm run verify:package` unpacks the finished bundle and checks the release invariants
 - `npm ci` also installs the pinned `mcpb` packer locally, so `npx @anthropic-ai/mcpb pack` resolves to the tested version inside this repo
 - the release archive excludes `node_modules/`, source files, and stale Python artifacts
 

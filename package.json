@@ -1,14 +1,15 @@
 {
   "name": "@nowledge/claude-dxt",
   "private": true,
-  "version": "1.4.1",
+  "version": "1.4.2",
   "type": "module",
   "scripts": {
     "build": "node ./scripts/build.mjs",
     "prepare": "npm run build",
     "test": "npm run build && node --test tests/*.test.js",
     "smoke": "npm run build && node ./scripts/smoke-test.mjs",
-    "pack": "npm run build && npx @anthropic-ai/mcpb pack"
+    "verify:package": "node ./scripts/verify-package.mjs",
+    "pack": "npm run build && npx @anthropic-ai/mcpb pack && npm run verify:package"
   },
   "devDependencies": {
     "@anthropic-ai/mcpb": "2.1.2",

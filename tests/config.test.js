@@ -3,10 +3,12 @@ import assert from "node:assert/strict";
 
 import {
   createHeaders,
+  buildMcpUrl,
   readConfigValue,
   resolveApiKey,
   resolveApiUrl,
   resolveBaseUrl,
+  normalizeMcpPath,
   stripLegacyRemoteApiPrefix,
 } from "../src/index.js";
 
@@ -41,6 +43,13 @@ test("stripLegacyRemoteApiPrefix removes the legacy gateway prefix", (t) => {
   );
 });
 
+test("normalizeMcpPath preserves explicit MCP endpoints and appends when needed", (t) => {
+  withClearedEnv(t);
+  assert.equal(normalizeMcpPath("https://mem.example.com").toString(), "https://mem.example.com/mcp");
+  assert.equal(normalizeMcpPath("https://mem.example.com/space").toString(), "https://mem.example.com/space/mcp");
+  assert.equal(normalizeMcpPath("https://mem.example.com/mcp/").toString(), "https://mem.example.com/mcp");
+});
+
 test("resolveApiUrl prefers shared config keys and normalizes trailing slashes", (t) => {
   withClearedEnv(t);
   assert.equal(
@@ -67,6 +76,13 @@ test("resolveApiKey and headers preserve the shared auth contract", (t) => {
 
 test("buildMcpUrl only appends /mcp for configured remote servers", (t) => {
   withClearedEnv(t);
+  assert.equal(buildMcpUrl("https://mem.example.com/mcp"), "https://mem.example.com/mcp");
+  assert.equal(buildMcpUrl("https://mem.example.com/remote-base"), "https://mem.example.com/remote-base/mcp");
   assert.equal(resolveBaseUrl({ apiUrl: "https://mem.example.com" }), "https://mem.example.com/mcp");
+  assert.equal(resolveBaseUrl({ apiUrl: "https://mem.example.com/mcp/" }), "https://mem.example.com/mcp");
+  assert.equal(
+    resolveBaseUrl({ apiUrl: "https://mem.example.com/remote-api/mcp/" }),
+    "https://mem.example.com/mcp"
+  );
   assert.equal(resolveBaseUrl({}), "http://127.0.0.1:14242/mcp");
 });

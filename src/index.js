@@ -13,7 +13,7 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
-const VERSION = "1.4.1";
+const VERSION = "1.4.2";
 const LOCAL_URL = "http://127.0.0.1:14242/mcp";
 const CLIENT_SESSION_ID = crypto.randomUUID().replace(/-/g, "");
 const CONFIG_PATH = path.join(os.homedir(), ".nowledge-mem", "config.json");
@@ -65,6 +65,19 @@ export function stripLegacyRemoteApiPrefix(url) {
   return parsed;
 }
 
+export function normalizeMcpPath(url) {
+  const parsed = new URL(url);
+  const pathname = parsed.pathname.replace(/\/+$/, "") || "/";
+
+  if (pathname === "/mcp") {
+    parsed.pathname = "/mcp";
+    return parsed;
+  }
+
+  parsed.pathname = pathname === "/" ? "/mcp" : `${pathname}/mcp`;
+  return parsed;
+}
+
 export function resolveApiUrl(config) {
   const env = resolveEnv("NMEM_API_URL");
   if (env) {
@@ -104,7 +117,7 @@ export function createHeaders(apiKey) {
 }
 
 export function buildMcpUrl(remoteUrl) {
-  return remoteUrl ? `${remoteUrl}/mcp` : LOCAL_URL;
+  return remoteUrl ? normalizeMcpPath(remoteUrl).toString() : LOCAL_URL;
 }
 
 export function resolveBaseUrl(config) {

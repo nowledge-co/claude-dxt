@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 
 import {
   createHeaders,
+  createBridgeCapabilities,
   buildMcpUrl,
   readConfigValue,
   resolveApiKey,
@@ -85,4 +86,21 @@ test("buildMcpUrl only appends /mcp for configured remote servers", (t) => {
     "https://mem.example.com/mcp"
   );
   assert.equal(resolveBaseUrl({}), "http://127.0.0.1:14242/mcp");
+});
+
+test("createBridgeCapabilities mirrors upstream tools, prompts, and resources", () => {
+  assert.deepEqual(
+    createBridgeCapabilities({
+      getServerCapabilities: () => ({
+        tools: { listChanged: true },
+        prompts: { listChanged: true },
+        resources: { subscribe: true, listChanged: true },
+      }),
+    }),
+    {
+      tools: {},
+      prompts: {},
+      resources: {},
+    }
+  );
 });

@@ -65,6 +65,41 @@ test("bridge proxies tools over stdio using shared remote config", async (t) => 
         content: [{ type: "text", text: "bridge-ok" }],
       })
     );
+    server.registerResource(
+      "Knowledge Graph Explorer",
+      "ui://nowledge/graph-explorer.html",
+      {
+        description: "Inline graph UI",
+        mimeType: "text/html;profile=mcp-app",
+      },
+      async (uri) => ({
+        contents: [
+          {
+            uri: uri.toString(),
+            mimeType: "text/html;profile=mcp-app",
+            text: "<html><body>graph-ok</body></html>",
+          },
+        ],
+      })
+    );
+    server.registerPrompt(
+      "save_memory",
+      {
+        description: "Test prompt bridge",
+      },
+      async () => ({
+        description: "Prompt bridge works",
+        messages: [
+          {
+            role: "assistant",
+            content: {
+              type: "text",
+              text: "prompt-ok",
+            },
+          },
+        ],
+      })
+    );
 
     const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
     res.on("close", () => {
@@ -127,6 +162,26 @@ test("bridge proxies tools over stdio using shared remote config", async (t) => 
     tools.tools.map((tool) => tool.name),
     ["ping_bridge"]
   );
+
+  const resources = await client.listResources();
+  assert.deepEqual(
+    resources.resources.map((resource) => resource.uri),
+    ["ui://nowledge/graph-explorer.html"]
+  );
+
+  const resource = await client.readResource({ uri: "ui://nowledge/graph-explorer.html" });
+  assert.equal(resource.contents[0].mimeType, "text/html;profile=mcp-app");
+  assert.equal(resource.contents[0].text, "<html><body>graph-ok</body></html>");
+
+  const prompts = await client.listPrompts();
+  assert.deepEqual(
+    prompts.prompts.map((prompt) => prompt.name),
+    ["save_memory"]
+  );
+
+  const prompt = await client.getPrompt({ name: "save_memory" });
+  assert.equal(prompt.messages[0].content.type, "text");
+  assert.equal(prompt.messages[0].content.text, "prompt-ok");
 
   const result = await client.callTool({ name: "ping_bridge", arguments: {} });
   assert.equal(result.isError, undefined);

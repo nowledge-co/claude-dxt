@@ -1,6 +1,6 @@
 # Nowledge Mem Claude Desktop Extension
 
-One-click Claude Desktop integration for Nowledge Mem on macOS and Windows, with no separate Python or Node installation required. After installation, Claude can search your memories, save important context, and update existing knowledge during any conversation.
+One-click Claude Desktop integration for Nowledge Mem on macOS and Windows, with no separate Python or Node installation required. After installation, Claude can search your memories, save important context, update existing knowledge, and open Mem's inline graph views during any conversation.
 
 ## Demo Screenshots
 

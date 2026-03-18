@@ -11,9 +11,19 @@ import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
-import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
+import {
+  CallToolRequestSchema,
+  GetPromptRequestSchema,
+  ListPromptsRequestSchema,
+  ListResourceTemplatesRequestSchema,
+  ListResourcesRequestSchema,
+  ListToolsRequestSchema,
+  ReadResourceRequestSchema,
+  SubscribeRequestSchema,
+  UnsubscribeRequestSchema,
+} from "@modelcontextprotocol/sdk/types.js";
 
-const VERSION = "1.4.2";
+const VERSION = "1.4.3";
 const LOCAL_URL = "http://127.0.0.1:14242/mcp";
 const CLIENT_SESSION_ID = crypto.randomUUID().replace(/-/g, "");
 const CONFIG_PATH = path.join(os.homedir(), ".nowledge-mem", "config.json");
@@ -141,14 +151,49 @@ export async function createBridgeClient(config = loadConfig()) {
   return client;
 }
 
+export function createBridgeCapabilities(client) {
+  const upstream = client.getServerCapabilities?.() ?? {};
+  const capabilities = {};
+
+  if (upstream.tools) {
+    capabilities.tools = {};
+  }
+  if (upstream.prompts) {
+    capabilities.prompts = {};
+  }
+  if (upstream.resources) {
+    capabilities.resources = {};
+  }
+
+  return capabilities;
+}
+
 export function createBridgeServer(client) {
   const server = new Server(
     { name: "nowledge-mem-claude-desktop", version: VERSION },
-    { capabilities: { tools: {} } }
+    { capabilities: createBridgeCapabilities(client) }
   );
 
-  server.setRequestHandler(ListToolsRequestSchema, async (request) => client.listTools(request.params));
-  server.setRequestHandler(CallToolRequestSchema, async (request) => client.callTool(request.params));
+  if (client.getServerCapabilities?.()?.tools) {
+    server.setRequestHandler(ListToolsRequestSchema, async (request) => client.listTools(request.params));
+    server.setRequestHandler(CallToolRequestSchema, async (request) => client.callTool(request.params));
+  }
+
+  if (client.getServerCapabilities?.()?.prompts) {
+    server.setRequestHandler(ListPromptsRequestSchema, async (request) => client.listPrompts(request.params));
+    server.setRequestHandler(GetPromptRequestSchema, async (request) => client.getPrompt(request.params));
+  }
+
+  if (client.getServerCapabilities?.()?.resources) {
+    server.setRequestHandler(ListResourcesRequestSchema, async (request) => client.listResources(request.params));
+    server.setRequestHandler(
+      ListResourceTemplatesRequestSchema,
+      async (request) => client.listResourceTemplates(request.params)
+    );
+    server.setRequestHandler(ReadResourceRequestSchema, async (request) => client.readResource(request.params));
+    server.setRequestHandler(SubscribeRequestSchema, async (request) => client.subscribeResource(request.params));
+    server.setRequestHandler(UnsubscribeRequestSchema, async (request) => client.unsubscribeResource(request.params));
+  }
 
   return server;
 }

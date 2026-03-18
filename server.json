@@ -6,13 +6,13 @@
     "url": "https://github.com/nowledge-co/claude-dxt",
     "source": "github"
   },
-  "version": "1.4.2",
+  "version": "1.4.3",
   "packages": [
     {
       "registryType": "mcpb",
-      "identifier": "https://github.com/nowledge-co/claude-dxt/releases/download/v1.4.2/claude-dxt.mcpb",
-      "version": "1.4.2",
-      "fileSha256": "4e2f5848da0ffeafefc862b3521ea379d1dba6d3ec3f934f1216d39f45a35a17",
+      "identifier": "https://github.com/nowledge-co/claude-dxt/releases/download/v1.4.3/claude-dxt.mcpb",
+      "version": "1.4.3",
+      "fileSha256": "7c84835007fbe14a0930a2135e81c965080a03c95870ef6b3cb98cdb8862b6b2",
       "transport": {
         "type": "stdio"
       }

@@ -40,6 +40,23 @@ async function startMockRemoteServer() {
         ],
       })
     );
+    server.registerResource(
+      "Knowledge Graph Explorer",
+      "ui://nowledge/graph-explorer.html",
+      {
+        description: "Inline graph UI",
+        mimeType: "text/html;profile=mcp-app",
+      },
+      async (uri) => ({
+        contents: [
+          {
+            uri: uri.toString(),
+            mimeType: "text/html;profile=mcp-app",
+            text: "<html><body>graph-ok</body></html>",
+          },
+        ],
+      })
+    );
 
     const transport = new StreamableHTTPServerTransport({
       sessionIdGenerator: undefined,
@@ -130,6 +147,16 @@ async function main() {
 
     const tools = await client.listTools();
     assert.ok(tools.tools.some((tool) => tool.name === "echo_memory"), "echo_memory tool was not forwarded");
+
+    const resources = await client.listResources();
+    assert.ok(
+      resources.resources.some((resource) => resource.uri === "ui://nowledge/graph-explorer.html"),
+      "graph resource was not forwarded"
+    );
+
+    const resource = await client.readResource({ uri: "ui://nowledge/graph-explorer.html" });
+    assert.equal(resource.contents[0].mimeType, "text/html;profile=mcp-app");
+    assert.equal(resource.contents[0].text, "<html><body>graph-ok</body></html>");
 
     const result = await client.callTool({
       name: "echo_memory",

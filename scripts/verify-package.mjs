@@ -55,7 +55,7 @@ async function main() {
     ]);
 
     const manifest = JSON.parse(await fs.readFile(path.join(unpackDir, "manifest.json"), "utf8"));
-    assert.equal(manifest.version, "1.4.2");
+    assert.equal(manifest.version, "1.4.3");
     assert.equal(manifest.server?.type, "node");
     assert.equal(manifest.server?.entry_point, "dist/index.js");
     assert.equal(manifest.server?.mcp_config?.command, "node");

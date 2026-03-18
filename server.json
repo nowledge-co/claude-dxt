@@ -12,7 +12,7 @@
       "registryType": "mcpb",
       "identifier": "https://github.com/nowledge-co/claude-dxt/releases/download/v1.4.3/claude-dxt.mcpb",
       "version": "1.4.3",
-      "fileSha256": "ed7cfb27857323379f97cd575e2c5e6ebbdeab77a74040220330420dc0c9a8d1",
+      "fileSha256": "a08f6e8260bc11735351b1466401d576f9fac1f3e7669b03e26132a0ef33e97b",
       "transport": {
         "type": "stdio"
       }

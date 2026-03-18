@@ -98,9 +98,9 @@ test("createBridgeCapabilities mirrors upstream tools, prompts, and resources", 
       }),
     }),
     {
-      tools: {},
-      prompts: {},
-      resources: {},
+      tools: { listChanged: true },
+      prompts: { listChanged: true },
+      resources: { subscribe: true, listChanged: true },
     }
   );
 });

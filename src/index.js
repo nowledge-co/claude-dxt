@@ -18,8 +18,11 @@ import {
   ListResourceTemplatesRequestSchema,
   ListResourcesRequestSchema,
   ListToolsRequestSchema,
+  PromptListChangedNotificationSchema,
   ReadResourceRequestSchema,
+  ResourceListChangedNotificationSchema,
   SubscribeRequestSchema,
+  ToolListChangedNotificationSchema,
   UnsubscribeRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 
@@ -156,35 +159,49 @@ export function createBridgeCapabilities(client) {
   const capabilities = {};
 
   if (upstream.tools) {
-    capabilities.tools = {};
+    capabilities.tools = upstream.tools.listChanged ? { listChanged: true } : {};
   }
   if (upstream.prompts) {
-    capabilities.prompts = {};
+    capabilities.prompts = upstream.prompts.listChanged ? { listChanged: true } : {};
   }
   if (upstream.resources) {
     capabilities.resources = {};
+    if (upstream.resources.listChanged) {
+      capabilities.resources.listChanged = true;
+    }
+    if (upstream.resources.subscribe) {
+      capabilities.resources.subscribe = true;
+    }
   }
 
   return capabilities;
 }
 
 export function createBridgeServer(client) {
-  const server = new Server(
-    { name: "nowledge-mem-claude-desktop", version: VERSION },
-    { capabilities: createBridgeCapabilities(client) }
-  );
+  const capabilities = createBridgeCapabilities(client);
+  const server = new Server({ name: "nowledge-mem-claude-desktop", version: VERSION }, { capabilities });
 
-  if (client.getServerCapabilities?.()?.tools) {
+  if (capabilities.tools) {
     server.setRequestHandler(ListToolsRequestSchema, async (request) => client.listTools(request.params));
     server.setRequestHandler(CallToolRequestSchema, async (request) => client.callTool(request.params));
+    if (capabilities.tools.listChanged) {
+      client.setNotificationHandler(ToolListChangedNotificationSchema, async () => {
+        await server.sendToolListChanged();
+      });
+    }
   }
 
-  if (client.getServerCapabilities?.()?.prompts) {
+  if (capabilities.prompts) {
     server.setRequestHandler(ListPromptsRequestSchema, async (request) => client.listPrompts(request.params));
     server.setRequestHandler(GetPromptRequestSchema, async (request) => client.getPrompt(request.params));
+    if (capabilities.prompts.listChanged) {
+      client.setNotificationHandler(PromptListChangedNotificationSchema, async () => {
+        await server.sendPromptListChanged();
+      });
+    }
   }
 
-  if (client.getServerCapabilities?.()?.resources) {
+  if (capabilities.resources) {
     server.setRequestHandler(ListResourcesRequestSchema, async (request) => client.listResources(request.params));
     server.setRequestHandler(
       ListResourceTemplatesRequestSchema,
@@ -193,6 +210,11 @@ export function createBridgeServer(client) {
     server.setRequestHandler(ReadResourceRequestSchema, async (request) => client.readResource(request.params));
     server.setRequestHandler(SubscribeRequestSchema, async (request) => client.subscribeResource(request.params));
     server.setRequestHandler(UnsubscribeRequestSchema, async (request) => client.unsubscribeResource(request.params));
+    if (capabilities.resources.listChanged) {
+      client.setNotificationHandler(ResourceListChangedNotificationSchema, async () => {
+        await server.sendResourceListChanged();
+      });
+    }
   }
 
   return server;

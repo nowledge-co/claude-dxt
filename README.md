@@ -57,6 +57,7 @@ The extension uses the Node runtime that ships with Claude Desktop, so end users
 ```bash
 npm ci
 npm test
+npm run smoke
 npm run pack
 ```
 
@@ -64,6 +65,7 @@ For maintainers:
 
 - `npm run build` bundles the bridge into `dist/index.js`
 - `npm test` rebuilds and runs the end-to-end MCP forwarding checks
+- `npm run smoke` validates the built `dist/index.js` against a mock MCP server
 - `npm run pack` builds and creates the final `.mcpb`
 - `npm ci` also installs the pinned `mcpb` packer locally, so `npx @anthropic-ai/mcpb pack` resolves to the tested version inside this repo
 - the release archive excludes `node_modules/`, source files, and stale Python artifacts

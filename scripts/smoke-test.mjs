@@ -65,17 +65,6 @@ async function startMockRemoteServer() {
     });
   });
 
-  app.delete("/mcp", (_req, res) => {
-    res.status(405).json({
-      jsonrpc: "2.0",
-      error: {
-        code: -32000,
-        message: "Method not allowed.",
-      },
-      id: null,
-    });
-  });
-
   const listener = await new Promise((resolve, reject) => {
     const server = app.listen(0, "127.0.0.1", () => resolve(server));
     server.once("error", reject);
@@ -87,8 +76,8 @@ async function startMockRemoteServer() {
   }
 
   return {
+    headers: () => observedHeaders,
     url: `http://127.0.0.1:${address.port}/remote-api`,
-    getObservedHeaders: () => observedHeaders,
     close: () =>
       new Promise((resolve, reject) => {
         listener.close((error) => {
@@ -113,7 +102,7 @@ async function main() {
     JSON.stringify(
       {
         apiUrl: remote.url,
-        apiKey: "nmem_smoke_test",
+        apiKey: "nmem_test_key",
       },
       null,
       2
@@ -136,11 +125,6 @@ async function main() {
     stderr: "pipe",
   });
 
-  let stderr = "";
-  transport.stderr?.on("data", (chunk) => {
-    stderr += chunk.toString();
-  });
-
   try {
     await client.connect(transport);
 
@@ -156,17 +140,15 @@ async function main() {
 
     const text = result.content.find((item) => item.type === "text")?.text;
     assert.equal(text, "echo:bridge-ok");
-    assert.equal(remote.getObservedHeaders()?.app, "Claude");
-    assert.equal(remote.getObservedHeaders()?.authorization, "Bearer nmem_smoke_test");
-    assert.equal(remote.getObservedHeaders()?.["x-nmem-api-key"], "nmem_smoke_test");
+
+    const headers = remote.headers();
+    assert.equal(headers?.app, "Claude");
+    assert.equal(headers?.authorization, "Bearer nmem_test_key");
+    assert.equal(headers?.["x-nmem-api-key"], "nmem_test_key");
   } finally {
     await client.close();
     await remote.close();
     await fs.rm(tempHome, { recursive: true, force: true });
-  }
-
-  if (stderr) {
-    process.stderr.write(stderr);
   }
 
   process.stdout.write("Smoke test passed.\n");
